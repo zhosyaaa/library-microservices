@@ -7,3 +7,10 @@ type User struct {
 	Is_verified      bool   `json:"is_Verified,omitempty"`
 	VerificationCode string `json:"verificationCode"`
 }
+type Book struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Author      string `json:"author"`
+	Description string `json:"description"`
+	PublishedAt string `json:"published_at"`
+}

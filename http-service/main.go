@@ -46,7 +46,6 @@ func main() {
 	s := handlers.NewHandler(authClient, emailClient, *repo)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/profile", s.Profile).Methods("GET")
 	r.HandleFunc("/auth/login", s.Login).Methods("POST")
 	r.HandleFunc("/auth/register", s.Register).Methods("POST")
 	r.HandleFunc("/books", s.GetBooks).Methods("GET")
@@ -54,7 +53,7 @@ func main() {
 	r.HandleFunc("/books/{id}", s.GetBook).Methods("GET")
 	r.HandleFunc("/books/{id}", s.UpdateBook).Methods("PUT")
 	r.HandleFunc("/books/{id}", s.DeleteBook).Methods("DELETE")
-	r.HandleFunc("/verify/{code}", s.VerifyCode).Methods("GET")
+	r.HandleFunc("/verify", s.VerifyCode).Methods("POST")
 	r.Use(middlewares.LoggingMiddleware)
 
 	srv := &http.Server{

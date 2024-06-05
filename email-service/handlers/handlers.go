@@ -27,7 +27,7 @@ func generateVerificationCode() string {
 
 func sendEmail(to, subject, body string) error {
 	from := "musabecova05@gmail.com"
-	password := ""
+	password := "mayf ayum loqn haqs"
 
 	auth := smtp.PlainAuth("", from, password, "smtp.gmail.com")
 
