@@ -15,4 +15,5 @@ message EmailRequest {
 
 message EmailResponse {
   bool success = 1;
+  string code = 2;
 }

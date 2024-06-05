@@ -6,7 +6,6 @@ import (
 	"log"
 	"math/rand"
 	"net/smtp"
-	"strconv"
 	"time"
 )
 
@@ -14,9 +13,16 @@ type Server struct {
 	pb.UnimplementedEmailServiceServer
 }
 
+const verificationCodeLength = 6
+
 func generateVerificationCode() string {
 	rand.Seed(time.Now().UnixNano())
-	return strconv.Itoa(100000 + rand.Intn(900000))
+	chars := "0123456789"
+	code := make([]byte, verificationCodeLength)
+	for i := range code {
+		code[i] = chars[rand.Intn(len(chars))]
+	}
+	return string(code)
 }
 
 func sendEmail(to, subject, body string) error {
@@ -44,7 +50,7 @@ func (s *Server) SendVerificationCode(ctx context.Context, in *pb.EmailRequest) 
 		return &pb.EmailResponse{Success: false}, err
 	}
 	log.Println("[Email Service] Verification code sent successfully")
-	return &pb.EmailResponse{Success: true}, nil
+	return &pb.EmailResponse{Success: true, Code: code}, nil
 }
 
 func (s *Server) SendConfirmationEmail(ctx context.Context, in *pb.EmailRequest) (*pb.EmailResponse, error) {

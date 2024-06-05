@@ -41,22 +41,25 @@ func (s *Handler) Register(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, "Failed to register user", http.StatusInternalServerError)
 		return
 	}
+	emailReq := &pb.EmailRequest{
+		To: req.Email,
+	}
+	emailRes, err := s.emailClient.SendVerificationCode(context.Background(), emailReq)
+	if err != nil {
+		log.Println("[Main Service] Failed to send email:", err)
+		http.Error(writer, "Failed to send email", http.StatusInternalServerError)
+		return
+	}
+
 	user := models.User{
-		Email:       req.Email,
-		Password:    authRes.Pass,
-		Is_verified: false,
+		Email:            req.Email,
+		Password:         authRes.Pass,
+		Is_verified:      false,
+		VerificationCode: emailRes.Code,
 	}
 	if err := s.repo.CreateUser(&user); err != nil {
 		log.Println("[Main Service] Failed to save user to database:", err)
 		http.Error(writer, "Failed to register user", http.StatusInternalServerError)
-		return
-	}
-	emailReq := &pb.EmailRequest{
-		To: req.Email,
-	}
-	if _, err := s.emailClient.SendVerificationCode(context.Background(), emailReq); err != nil {
-		log.Println("[Main Service] Failed to send email:", err)
-		http.Error(writer, "Failed to send email", http.StatusInternalServerError)
 		return
 	}
 
