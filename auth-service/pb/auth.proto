@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "./pb";
+
+service AuthService {
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+  rpc GetTokenAndHash (GetTokenHashRequest) returns (GetTokenHashResponse);
+}
+
+message GetTokenHashRequest {
+  string email = 1;
+  string password = 2;
+}
+message GetTokenHashResponse {
+  string pass = 1;
+  string token = 2;
+}
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;
+  string email = 2;
+}

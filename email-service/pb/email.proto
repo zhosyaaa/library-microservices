@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package email;
+
+option go_package = "./pb";
+
+service EmailService {
+  rpc SendVerificationCode(EmailRequest) returns (EmailResponse);
+  rpc SendConfirmationEmail(EmailRequest) returns (EmailResponse);
+}
+
+message EmailRequest {
+  string to = 1;
+}
+
+message EmailResponse {
+  bool success = 1;
+}
